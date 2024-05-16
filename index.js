@@ -12,14 +12,14 @@ app.use(cookieParser());
 const LogInRoute=require('./routes/login');
 const ProfileRoute=require('./routes/profile');
 const FormRoute=require('./routes/form');
-//const ContactsRoute=require('./routes/contacts');
+const ContactsRoute=require('./routes/contacts');
 
 app.use('/login',LogInRoute);
 // Protected routes
 app.use('/profile', authenticateJWT, ProfileRoute); // Protected by auth middleware
 app.use('/form', authenticateJWT, FormRoute); // Protected by auth middleware
 //solo quita del comentario la linea de abajo cuando termines la ruta de contacts
-//app.use('/contacts', authenticateJWT, ContactsRoute); // Protected by auth middleware
+app.use('/contacts', authenticateJWT, ContactsRoute); // Protected by auth middleware
 
 //Get default
 app.get('/', (req, res) => {
