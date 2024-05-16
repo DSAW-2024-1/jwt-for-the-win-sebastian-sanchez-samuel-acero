@@ -1,5 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const authenticateJWT = require('./middleware/auth');
 const PORT = 3000;
 const app = express();
 
@@ -11,28 +12,14 @@ app.use(cookieParser());
 const LogInRoute=require('./routes/login');
 const ProfileRoute=require('./routes/profile');
 const FormRoute=require('./routes/form');
-const ContactsRoute=require('./routes/contacts');
+//const ContactsRoute=require('./routes/contacts');
 
 app.use('/login',LogInRoute);
-app.use('/profile',ProfileRoute);
-app.use('/form',FormRoute);
-app.use('/contacts',ContactsRoute);
-
-// Middleware de autenticación
-const authenticateJWT = (req, res, next) => {
-    const token = req.cookies.token;
-    if (token) {
-        jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-            if (err) {
-                return res.sendStatus(403);
-            }
-            req.user = user;
-            next();
-        });
-    } else {
-        res.sendStatus(401);
-    }
-};
+// Protected routes
+app.use('/profile', authenticateJWT, ProfileRoute); // Protected by auth middleware
+app.use('/form', authenticateJWT, FormRoute); // Protected by auth middleware
+//solo quita del comentario la linea de abajo cuando termines la ruta de contacts
+//app.use('/contacts', authenticateJWT, ContactsRoute); // Protected by auth middleware
 
 //Get default
 app.get('/', (req, res) => {
