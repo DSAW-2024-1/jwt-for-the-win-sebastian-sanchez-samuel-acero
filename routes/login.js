@@ -34,7 +34,7 @@ router.post('/',(req,res) => {
     if (users[email] && users[email] === password) {
         const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '1h' });
         res.cookie('token', token, { httpOnly: true });
-        return res.status(200).send('Login successful');
+        return res.status(200).send(SECRET_KEY);
     }
 
     return res.status(401).send('Invalid email or password');
